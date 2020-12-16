@@ -14,7 +14,7 @@ let nextNumber = 0;
 
 readInterface.on('line', function (line) {
     currentTurn += 1;
-    turnsMap[line] = [0, currentTurn];
+    turnsMap[line] = currentTurn;
 });
 
 readInterface.on('close', () => {
@@ -23,11 +23,11 @@ readInterface.on('close', () => {
         currentTurn += 1;
         if (currentTurn === LAST_TURN) console.log('The', LAST_TURN, 'number is', nextNumber);
         if (!turnsMap[nextNumber]) {
-            turnsMap[nextNumber] = [0, currentTurn];
+            turnsMap[nextNumber] = currentTurn;
             nextNumber = 0;
         } else {
-            prevTurn = turnsMap[nextNumber][1];
-            turnsMap[nextNumber] = [prevTurn, currentTurn];
+            prevTurn = turnsMap[nextNumber];
+            turnsMap[nextNumber] = currentTurn;
             nextNumber = currentTurn - prevTurn;
         }
     }

@@ -7,15 +7,15 @@ const readInterface = readline.createInterface({
     console: false
 })
 
-// The solutions is the same. It's way too long, lol, but my time is more expensive :) Pre-mature optimization is evil.
+// The solutions is much faster though uses more memory.
 const LAST_TURN = 30000000;
+const curValues = new Uint32Array(LAST_TURN)
 let currentTurn = 0;
-const turnsMap = {}
 let nextNumber = 0;
 
 readInterface.on('line', function (line) {
     currentTurn += 1;
-    turnsMap[line] = [0, currentTurn];
+    curValues[Number(line)] = currentTurn;
 });
 
 readInterface.on('close', () => {
@@ -23,12 +23,12 @@ readInterface.on('close', () => {
     while (currentTurn < LAST_TURN) {
         currentTurn += 1;
         if (currentTurn === LAST_TURN) console.log('The', LAST_TURN, 'number is', nextNumber);
-        if (!turnsMap[nextNumber]) {
-            turnsMap[nextNumber] = [0, currentTurn];
+        if (!curValues[nextNumber]) {
+            curValues[nextNumber] = currentTurn;
             nextNumber = 0;
         } else {
-            prevTurn = turnsMap[nextNumber][1];
-            turnsMap[nextNumber] = [prevTurn, currentTurn];
+            prevTurn = curValues[nextNumber];
+            curValues[nextNumber] = currentTurn;
             nextNumber = currentTurn - prevTurn;
         }
     }
